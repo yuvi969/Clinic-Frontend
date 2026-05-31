@@ -1,10 +1,10 @@
-import { io } from "socket.io-client";
+import axios from "axios";
 
-const socket = io(
-  "http://localhost:5000",
-  {
-    withCredentials: true,
-  }
-);
+const api = axios.create({
+  baseURL: import.meta.env.PROD
+    ? "https://clinic-backend-r2of.onrender.com/api"
+    : "http://localhost:5000/api",
+  withCredentials: true,
+});
 
-export default socket;
+export default api;
