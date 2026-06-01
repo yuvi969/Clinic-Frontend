@@ -152,6 +152,16 @@ function PatientDashboard() {
     loadData();
   }, []);
 
+  useEffect(() => {
+
+  const interval = setInterval(() => {
+    fetchAppointments();
+  }, 30000);
+
+  return () => clearInterval(interval);
+
+}, []);
+
   const handleBooking = async (reason) => {
     try {
       await api.post("/appointments", { slot_id: selectedSlot.id, reason });
