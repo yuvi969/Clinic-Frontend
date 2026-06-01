@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { getPatientPrescription, getPatientStats } from "../api/patientApi";
 import ProfileModal from "../components/ProfileModal";
+import socket from "../socket";
 
 const brand = {
   coral: "#FF6F61",
@@ -137,6 +138,34 @@ function PatientDashboard() {
       alert(error.response?.data?.message || "Something failed");
     }
   };
+
+  useEffect(() => {
+
+  socket.on(
+    "prescriptionCreated",
+    async () => {
+
+      await fetchAppointments();
+
+      if (stats) {
+        const statsData =
+          await getPatientStats();
+
+        setStats(statsData);
+      }
+
+    }
+  );
+
+  return () => {
+
+    socket.off(
+      "prescriptionCreated"
+    );
+
+  };
+
+}, []);
 
   useEffect(() => {
     const loadData = async () => {
